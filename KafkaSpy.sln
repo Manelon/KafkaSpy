@@ -8,6 +8,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaSpy", "src\KafkaSpy\KafkaSpy.csproj", "{0C1FACA9-AE83-4D20-9BAB-A383555C8CF3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{564EC563-7114-44DC-9FAA-747C1CAFB7AB}"
+ProjectSection(SolutionItems) = preProject
+	test\Dockerfile = test\Dockerfile
+EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KafkaSpy.Tests", "test\KafkaSpy.Tests\KafkaSpy.Tests.csproj", "{90A92059-DD37-4C93-833F-F6C0ECF64E67}"
 EndProject
