@@ -19,3 +19,7 @@ msbuild.err
 msbuild.wrn
 
 TestResults/
+
+
+#sqlite database
+*.db

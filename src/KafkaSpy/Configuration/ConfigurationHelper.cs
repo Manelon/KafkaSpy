@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace KafkaSpy.Configuration
 {
-    public class ConfigurationHelper
+    public static class ConfigurationHelper
     {
         public static IConfigurationRoot GetIConfigurationRoot(string configurationPath, string[] args)
         {
@@ -15,16 +15,14 @@ namespace KafkaSpy.Configuration
                 .Build();
         }
 
-        public static Kafka GetKafkaConfiguration(string configurationPath, string[] args)
+        public static Kafka GetKafkaConfiguration(this IConfiguration configuration)
         {
-            var configuration = new Kafka();
-            var iConfig = GetIConfigurationRoot(configurationPath, args);
-            iConfig.GetSection("Kafka")
-                .Bind(configuration);
-            return configuration;
-
-
+            var kafkaConf = new Kafka();
+            configuration.GetSection("Kafka")
+                .Bind(kafkaConf);
+            return kafkaConf;
         }
+
         
     }
 }

@@ -37,40 +37,42 @@ namespace KafkaSpy.Gui
                 CanFocus = false
             };
 
+            Add(app);
+
 
             var exit = new Label("[F10 Exit (or ESC plus 0)]")
             {
                 X = 0,
-                Y = Pos.Bottom(app) - 4
+                Y = Pos.Bottom(app) 
             };
 
             app.Add(exit);
             
-            var clusterWindow = new Window("Cluster")
+            var clusterWindow = new FrameView("Cluster")
             {
                 Height = Dim.Sized(3),
-                Width = Dim.Fill(),
+                Width = Dim.Fill()-1,
+
                 CanFocus=false
             };
 
+
             var Boostrap = new Label($"BOOSTRAP SERVERS: ${_kafkaCluster.GetBootstrapServers()}");
             clusterWindow.Add(Boostrap);
-            app.Add(exit);
+            
+            
             app.Add(clusterWindow);
 
-            var wdnTopics = new Window("Topics"){
-                Height = Dim.Fill()-1, // Leave 1 row for the botton comands
+            var wdnTopics = new FrameView("Topics"){
                 Width = Dim.Percent(50),
-
-                X=0,
+                Height = Dim.Fill()-1,
                 Y=Pos.Bottom(clusterWindow)
             };
 
             var lstTopics = new ListView(_kafkaCluster.GetTopics()){
                 Height = Dim.Fill(), 
-                Width = Dim.Percent(50),
+                Width = Dim.Fill(),
                 CanFocus=true,
-                AllowsMarking=true,
                 AllowsMultipleSelection=false
             };
 
@@ -85,8 +87,11 @@ namespace KafkaSpy.Gui
                 })
             });
 
-            Add(menu, app);
-            SetFocus(lstTopics);
+
+            Add(menu);
+            // SetFocus(lstTopics);
+
+            BringSubviewToFront(Boostrap);
         }
     }
 }
