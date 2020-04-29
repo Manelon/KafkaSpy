@@ -6,6 +6,7 @@ using KafkaSpy.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Terminal.Gui;
+using KafkaSpy.Data;
 
 namespace KafkaSpy
 {
@@ -16,10 +17,21 @@ namespace KafkaSpy
         {
            
             try{
-                var configuration = ConfigurationHelper.GetKafkaConfiguration(Directory.GetCurrentDirectory(), args);
-                var cluster = new KafkaClusterMetadata(configuration.BootstrapServers);
+                //TODO: ADD M$.DependencyInjection
+                
+                
+                var configuration = ConfigurationHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory(), args);
+                var kafkaConfiguration = configuration.GetKafkaConfiguration ();
 
-                var app = new Gui.App(cluster); //This way I can use poor man's dependency injection
+                var dataContext = new DataContext(configuration.GetConnectionString("Sqlite"));
+
+                var cluster = new KafkaClusterMetadata(kafkaConfiguration.BootstrapServers, dataContext);
+
+                // var app = new Gui.App(cluster); //This way I can use poor man's dependency injection
+                // Application.Run(app);
+
+                var app = new Gui.Sample(cluster);
+
                 Application.Run(app);
             }catch(Exception ex){
                 Console.WriteLine($"Ala carallo {ex.ToString()}" );
