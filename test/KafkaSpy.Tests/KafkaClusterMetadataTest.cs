@@ -5,6 +5,7 @@ using Xunit;
 using KafkaSpy;
 using Microsoft.Data.Sqlite;
 using KafkaSpy.Data;
+using FizzWare.NBuilder;
 
 namespace KafkaSpy.Tests
 {
@@ -25,6 +26,15 @@ namespace KafkaSpy.Tests
             
 
             _metadata = new KafkaClusterMetadata(TestConfig.Bootstrap, _dataContext);
+
+            var messajes = Builder<TextMessaje>.CreateListOfSize(10)
+                .All()
+                    .With(c=>c.Key =Faker.Identification.UkNationalInsuranceNumber())
+                    .With(c=>c.Value = Faker.Name.FullName())
+                .Build();
+
+            ProducerUtils.ProduceStringMessages(_tempTopic.Name, messajes);
+
             
             
         }
@@ -41,6 +51,10 @@ namespace KafkaSpy.Tests
             var topics = _metadata.GetTopics();
             Assert.True(topics.Exists(x=>x.Name == _tempTopic.Name));
             
+        }
+
+        [Fact]
+        public void IsAbleToConsumeMesajes(){
 
         }
 
