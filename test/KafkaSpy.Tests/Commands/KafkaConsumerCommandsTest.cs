@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using FizzWare.NBuilder;
 using KafkaSpy.Commands;
 using Xunit;
@@ -23,9 +25,18 @@ namespace KafkaSpy.Tests.Commands
 
         [Fact]
         public void Can_count_message_in_topic(){
-            var count = KafkaConsumer.CountTopicMessajes(TestConfig.Bootstrap, "TestCount", _tempTopic.Name);
+            var stepProgress = 10;
+            var progressResults = new List<CountTopicMessajesRestult>();
+            var progress = new Progress<CountTopicMessajesRestult>(r=>{Console.WriteLine (r);
+                                                                progressResults.Add(r);});
 
-            Assert.Equal( _topicCountSize, count);
+
+            var count = KafkaConsumer.CountTopicMessajesAsync(TestConfig.Bootstrap, "TestCount", _tempTopic.Name, stepProgress, progress);
+
+            //Check toal
+            Assert.Equal( _topicCountSize, count.Count);
+            Console.WriteLine(count);
+            Assert.Equal( _topicCountSize/stepProgress, progressResults.Count);
         }
     }
 }
