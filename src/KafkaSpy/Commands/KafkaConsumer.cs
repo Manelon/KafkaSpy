@@ -9,16 +9,16 @@ namespace KafkaSpy.Commands
 {
     public class CountTopicMessajesRestult{
         public long Count { get; set; }
-        public long ElapsedTicks { get; set; }
+        public TimeSpan Elapsed { get; set; }
 
         public override String ToString(){
-            return $"Messajes {Count} in {TimeSpan.FromTicks(ElapsedTicks).TotalSeconds} seconds";
+            return $"Messajes {Count} in {Elapsed.TotalSeconds} seconds";
         }
     }
 
     public class KafkaConsumer
     {
-        public static CountTopicMessajesRestult CountTopicMessajesAsync(string bootstrapServers, string consumerGroup, string topicName, int stepProgress, IProgress<CountTopicMessajesRestult> progress)
+        public static CountTopicMessajesRestult CountTopicMessajes(string bootstrapServers, string consumerGroup, string topicName, int stepProgress, IProgress<CountTopicMessajesRestult> progress)
         {
             var config = new ConsumerConfig()
             {
@@ -53,7 +53,7 @@ namespace KafkaSpy.Commands
 
                              if (progress != null && (count % stepProgress ==0) )
                             {
-                                progress.Report(new CountTopicMessajesRestult(){Count=count,ElapsedTicks=sw.ElapsedTicks});
+                                progress.Report(new CountTopicMessajesRestult(){Count=count,Elapsed=sw.Elapsed});
                             }   
  
                         }
@@ -64,7 +64,7 @@ namespace KafkaSpy.Commands
                     c.Close();
                 }
 
-                var countResult = new CountTopicMessajesRestult(){Count=count,ElapsedTicks=sw.ElapsedTicks};
+                var countResult = new CountTopicMessajesRestult(){Count=count,Elapsed=sw.Elapsed};
                 sw.Stop();
 
                 return countResult;

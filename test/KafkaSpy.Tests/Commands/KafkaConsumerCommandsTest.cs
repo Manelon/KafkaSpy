@@ -9,7 +9,7 @@ namespace KafkaSpy.Tests.Commands
     public class KafkaConsumerCommandsTest
     {
         TemporaryTopic _tempTopic;
-        long _topicCountSize = 100L;
+        long _topicCountSize = 100000L;
         public KafkaConsumerCommandsTest(){
             _tempTopic =  new TemporaryTopic("ConsumerCommandTest", 2);
             
@@ -25,13 +25,13 @@ namespace KafkaSpy.Tests.Commands
 
         [Fact]
         public void Can_count_message_in_topic(){
-            var stepProgress = 10;
+            var stepProgress = 100;
             var progressResults = new List<CountTopicMessajesRestult>();
             var progress = new Progress<CountTopicMessajesRestult>(r=>{Console.WriteLine (r);
                                                                 progressResults.Add(r);});
 
 
-            var count = KafkaConsumer.CountTopicMessajesAsync(TestConfig.Bootstrap, "TestCount", _tempTopic.Name, stepProgress, progress);
+            var count = KafkaConsumer.CountTopicMessajes(TestConfig.Bootstrap, "TestCount", _tempTopic.Name, stepProgress, progress);
 
             //Check toal
             Assert.Equal( _topicCountSize, count.Count);
