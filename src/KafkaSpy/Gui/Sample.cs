@@ -45,26 +45,18 @@ namespace KafkaSpy.Gui
             
             frmTopics.Y =Pos.Bottom(frmCluster);
 
-            var frmTopicDetails = new FrmTopicDetails(frmTopics.GetSelectedTopic().Name, null);
+            var frmTopicDetails = new FrmTopicDetails(frmTopics.GetSelectedTopic().Name, kafkaCluster.GetBootstrapServers());
             frmTopicDetails.Y = Pos.Bottom(frmCluster);
             frmTopicDetails.X = Pos.Right(frmTopics);
 
-            // frmCluster.OnEnter +=(x,y)=>{
-            //     SetFocus(frmTopics.TopicListView);    
-            // };
-
             frmTopics.SelectedChanged += (source, topic)=> {frmTopicDetails.SetTopic(topic);};
+            
              
-    
-
             win.Add(frmCluster, frmTopics, frmTopicDetails);
 
             frmTopicDetails.SetTopic(frmTopics.GetSelectedTopic());
-            SetFocus(frmTopics.TopicListView);
-
-            
-
-
+            frmTopics.TopicListView.FocusFirst();
         }
+
     }
 }

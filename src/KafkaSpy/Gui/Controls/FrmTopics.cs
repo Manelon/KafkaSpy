@@ -4,7 +4,7 @@ using Terminal.Gui;
 
 namespace KafkaSpy.Gui.Controls
 {
-    public class FrmTopics: Window
+    public class FrmTopics: FrameView
     {
         KafkaClusterMetadata _kafkaCluster;
         public event SelectedChangedEventHandler SelectedChanged;
@@ -23,7 +23,7 @@ namespace KafkaSpy.Gui.Controls
             };
             Add(TopicListView);
 
-            TopicListView.SelectedChanged+= ()=>{
+            TopicListView.SelectedChanged += ()=>{
                 SelectedChanged?.Invoke(this, _kafkaCluster.GetTopics()[TopicListView.SelectedItem]);
             };
 

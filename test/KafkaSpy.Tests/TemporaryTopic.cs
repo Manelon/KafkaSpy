@@ -19,7 +19,7 @@ namespace KafkaSpy.Tests
 
         public TemporaryTopic(string topicName, int numPartitions)
         {
-            this.Name = topicName;
+            this.Name = $"kafkaspy_test_{topicName}_{Guid.NewGuid().ToString()}";
             CreateTopic(numPartitions);
         }
 
