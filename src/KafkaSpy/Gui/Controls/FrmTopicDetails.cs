@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Confluent.Kafka;
 using KafkaSpy.Commands;
 using KafkaSpy.Data;
 using Terminal.Gui;
@@ -16,12 +17,12 @@ namespace KafkaSpy.Gui.Controls
 
         Label lblProgressCount = new Label("");
 
-        string _bootstrapServers;
+        ClientConfig _kafkaClientConfig;
 
-        public FrmTopicDetails(string title, string bootstrapServer) : base(title)
+        public FrmTopicDetails(string topicName, ClientConfig kafkaClientConfig) : base(topicName)
         {
 
-            _bootstrapServers = bootstrapServer;
+            _kafkaClientConfig = kafkaClientConfig;
             Width = Dim.Fill();
             Height = 7; //I don't know why, but the frameView needs an extra row
 
@@ -71,7 +72,7 @@ namespace KafkaSpy.Gui.Controls
             if (int.TryParse(txtProgressSteps.Text.ToString(), out int steps))
             {
                 var a = await Task.Run(() =>
-                    KafkaConsumer.CountTopicMessajes(_bootstrapServers, $"Count_{this.Title}", this.Title.ToString(), steps, progress)
+                    KafkaConsumer.CountTopicMessajes(_kafkaClientConfig, $"Count_{this.Title}", this.Title.ToString(), steps, progress)
                 );
             }
             }catch(Exception ex){

@@ -18,14 +18,14 @@ namespace KafkaSpy.Commands
 
     public class KafkaConsumer
     {
-        public static CountTopicMessajesRestult CountTopicMessajes(string bootstrapServers, string consumerGroup, string topicName, int stepProgress, IProgress<CountTopicMessajesRestult> progress)
+        public static CountTopicMessajesRestult CountTopicMessajes(ClientConfig kafkaClientConfig, string consumerGroup, string topicName, int stepProgress, IProgress<CountTopicMessajesRestult> progress)
         {
-            var config = new ConsumerConfig()
+
+            var config = new ConsumerConfig(kafkaClientConfig)
             {
                 GroupId = consumerGroup,
-                BootstrapServers = bootstrapServers,
                 AutoOffsetReset = AutoOffsetReset.Earliest,
-                EnableAutoCommit = false
+                EnableAutoCommit = false,
             };
             
             long count = 0;

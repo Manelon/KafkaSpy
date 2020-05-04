@@ -10,14 +10,23 @@ namespace KafkaSpy.Configuration
         public static IConfigurationRoot GetIConfigurationRoot(string configurationPath, string[] args)
         {
             return new ConfigurationBuilder()
+                .SetBasePath(configurationPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddCommandLine(args) //usging arguments line shoulf be --key=value for instance Kafka:BootstrapServers:localhost:8082
                 .Build();
         }
 
-        public static Kafka GetKafkaConfiguration(this IConfiguration configuration)
+        public static IConfigurationRoot GetIConfigurationRoot(string configurationPath, string jsonFileName, string[] args)
         {
-            var kafkaConf = new Kafka();
+            return new ConfigurationBuilder()
+                .AddJsonFile(jsonFileName, optional: true, reloadOnChange: true)
+                .AddCommandLine(args) //usging arguments line shoulf be --key=value for instance Kafka:BootstrapServers:localhost:8082
+                .Build();
+        }
+
+        public static KafkaConfiguration GetKafkaConfiguration(this IConfiguration configuration)
+        {
+            var kafkaConf = new KafkaConfiguration();
             configuration.GetSection("Kafka")
                 .Bind(kafkaConf);
             return kafkaConf;

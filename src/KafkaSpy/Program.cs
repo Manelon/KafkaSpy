@@ -25,7 +25,7 @@ namespace KafkaSpy
 
                 var dataContext = new DataContext(configuration.GetConnectionString("Sqlite"));
 
-                var cluster = new KafkaClusterMetadata(kafkaConfiguration.BootstrapServers, dataContext);
+                var cluster = new KafkaClusterMetadata(kafkaConfiguration.BuildClientConfig(), dataContext);
 
                 // var app = new Gui.App(cluster); //This way I can use poor man's dependency injection
                 // Application.Run(app);

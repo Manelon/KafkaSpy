@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Confluent.Kafka;
+using KafkaSpy.Configuration;
 using KafkaSpy.Data;
 
 namespace KafkaSpy
@@ -12,23 +13,20 @@ namespace KafkaSpy
 
         private IAdminClient _adminClient;
         private Metadata _metadata;
-        private string _bootstrapServers;
+        public ClientConfig KafkaClientConfig { get; private set; }
 
         DataContext _dataContext;
 
         private IEnumerable<Topic> _topics;
 
-        public KafkaClusterMetadata(string bootstrapServers, DataContext dataContext)
+        public KafkaClusterMetadata(ClientConfig kafkaClientConfig , DataContext dataContext)
         {
-            _bootstrapServers = bootstrapServers;
+            KafkaClientConfig = kafkaClientConfig;
             _dataContext = dataContext;
             _topics = dataContext.GetTopics();
 
-            var adminClientConfig = new AdminClientConfig()
-            {
-                BootstrapServers = _bootstrapServers
-            };
-
+            var adminClientConfig = new AdminClientConfig(KafkaClientConfig);
+            
             _adminClient = new AdminClientBuilder(adminClientConfig).Build();
             RefreshData(TimeSpan.FromSeconds(10));
         }
@@ -58,10 +56,8 @@ namespace KafkaSpy
         }
 
         public string GetBootstrapServers () {
-            return _bootstrapServers;
+            return KafkaClientConfig.BootstrapServers;
         }
-        
-        
         
     }
 }
