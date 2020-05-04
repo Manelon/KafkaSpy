@@ -18,14 +18,17 @@ namespace KafkaSpy.Commands
 
     public class KafkaConsumer
     {
-        public static CountTopicMessajesRestult CountTopicMessajes(string bootstrapServers, string consumerGroup, string topicName, int stepProgress, IProgress<CountTopicMessajesRestult> progress)
+        public static Task<CountTopicMessajesRestult> CountTopicMessajesAsync(ClientConfig kafkaClientConfig, string consumerGroup, string topicName, int stepProgress, IProgress<CountTopicMessajesRestult> progress){
+            return Task.Run( ()=> CountTopicMessajes (kafkaClientConfig, consumerGroup, topicName, stepProgress, progress));
+        }
+        public static CountTopicMessajesRestult CountTopicMessajes(ClientConfig kafkaClientConfig, string consumerGroup, string topicName, int stepProgress, IProgress<CountTopicMessajesRestult> progress)
         {
-            var config = new ConsumerConfig()
+
+            var config = new ConsumerConfig(kafkaClientConfig)
             {
                 GroupId = consumerGroup,
-                BootstrapServers = bootstrapServers,
                 AutoOffsetReset = AutoOffsetReset.Earliest,
-                EnableAutoCommit = false
+                EnableAutoCommit = false,
             };
             
             long count = 0;
@@ -51,7 +54,8 @@ namespace KafkaSpy.Commands
                                 timeout = TimeSpan.FromSeconds(1);
                             count++;
 
-                             if (progress != null && (count % stepProgress ==0) )
+                             if (progress != null && 
+                                (count==1 || count % stepProgress ==0 ))
                             {
                                 progress.Report(new CountTopicMessajesRestult(){Count=count,Elapsed=sw.Elapsed});
                             }   

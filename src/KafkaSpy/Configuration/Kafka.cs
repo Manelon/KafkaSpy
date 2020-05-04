@@ -1,11 +1,12 @@
 using System;
+using Confluent.Kafka;
+
 namespace KafkaSpy.Configuration
 {
-    public class Kafka
+    public class KafkaConfiguration //TODO:Cambiar esto por kafkaClientConfig
     {
-        public String BootstrapServers { get; set; }
-    }
-
+        public ClientConfig ClientConfig {get;set;}   
+    }   
 
     
 }

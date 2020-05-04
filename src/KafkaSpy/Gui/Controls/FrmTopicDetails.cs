@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Confluent.Kafka;
 using KafkaSpy.Commands;
 using KafkaSpy.Data;
 using Terminal.Gui;
@@ -10,18 +11,18 @@ namespace KafkaSpy.Gui.Controls
     {
         Label lblPartitions = new Label(0, 0, "Partitions");
         Label lblContentType = new Label("ContentType");
-        public Button btnCount = new Button("Count _Messajes");
+        public Button btnCount = new Button("Count");
         Label lblProgressSteps = new Label("Progress Steps");
         TextField txtProgressSteps = new TextField("10000");
 
         Label lblProgressCount = new Label("");
 
-        string _bootstrapServers;
+        ClientConfig _kafkaClientConfig;
 
-        public FrmTopicDetails(string title, string bootstrapServer) : base(title)
+        public FrmTopicDetails(string topicName, ClientConfig kafkaClientConfig) : base(topicName)
         {
 
-            _bootstrapServers = bootstrapServer;
+            _kafkaClientConfig = kafkaClientConfig;
             Width = Dim.Fill();
             Height = 7; //I don't know why, but the frameView needs an extra row
 
@@ -70,10 +71,12 @@ namespace KafkaSpy.Gui.Controls
                 var progress = new Progress<CountTopicMessajesRestult>(UpdateProgress);
             if (int.TryParse(txtProgressSteps.Text.ToString(), out int steps))
             {
-                var a = await Task.Run(() =>
-                    KafkaConsumer.CountTopicMessajes(_bootstrapServers, $"Count_{this.Title}", this.Title.ToString(), steps, progress)
-                );
+                lblProgressCount.Text = "Running";
+                //var result = await KafkaConsumer.CountTopicMessajesAsync(_kafkaClientConfig, $"Count_{this.Title}", this.Title.ToString(), steps, progress);
+                var result =  await Task.Run( ()=> KafkaConsumer.CountTopicMessajes (_kafkaClientConfig, $"Count_{this.Title}", this.Title.ToString(), steps, progress));
+                lblProgressCount.Text = result.ToString();
             }
+            
             }catch(Exception ex){
                 lblProgressCount.Text = ex.Message;
             }
@@ -87,9 +90,9 @@ namespace KafkaSpy.Gui.Controls
 
         private void UpdateProgress(CountTopicMessajesRestult progress)
         {
-
-            lblProgressCount.Text = progress.ToString();
-
+                //Application.MainLoop.Invoke (()=>lblProgressCount.Text = progress.ToString());
+                lblProgressCount.Text = progress.ToString();
+                Application.Refresh(); //This should not be necesary. But for the moment, it 
         }
 
     }
