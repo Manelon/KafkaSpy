@@ -25,7 +25,7 @@ namespace KafkaSpy.Tests.Commands
 
         [Fact]
         public void Can_count_message_in_topic(){
-            var stepProgress = 100;
+            var stepProgress = 50;
             var progressResults = new List<CountTopicMessajesRestult>();
             var progress = new Progress<CountTopicMessajesRestult>(r=>{Console.WriteLine (r);
                                                                 progressResults.Add(r);});
@@ -36,7 +36,8 @@ namespace KafkaSpy.Tests.Commands
             //Check toal
             Assert.Equal( _topicCountSize, count.Count);
             Console.WriteLine(count);
-            Assert.Equal( _topicCountSize/stepProgress, progressResults.Count);
+            if (count.Count > 1)
+                Assert.Equal( (_topicCountSize/stepProgress)+1, progressResults.Count);
         }
     }
 }
