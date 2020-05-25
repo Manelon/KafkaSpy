@@ -19,13 +19,12 @@ namespace KafkaSpy
             try{
                 //TODO: ADD M$.DependencyInjection
                 
-                
                 var configuration = ConfigurationHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory(), args);
                 var kafkaConfiguration = configuration.GetKafkaConfiguration ();
 
                 var dataContext = new DataContext(configuration.GetConnectionString("Sqlite"));
 
-                var cluster = new KafkaClusterMetadata(kafkaConfiguration.BootstrapServers, dataContext);
+                var cluster = new KafkaClusterMetadata(kafkaConfiguration.ClientConfig, dataContext);
 
                 // var app = new Gui.App(cluster); //This way I can use poor man's dependency injection
                 // Application.Run(app);
@@ -35,7 +34,6 @@ namespace KafkaSpy
                 Application.Run(app);
             }catch(Exception ex){
                 Console.WriteLine($"Ala carallo {ex.ToString()}" );
-
             }
 
         }

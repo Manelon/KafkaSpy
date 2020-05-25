@@ -25,7 +25,7 @@ namespace KafkaSpy.Tests
             _dataContext = new DataContext(TestConfig.ConnectionString);
             
 
-            _metadata = new KafkaClusterMetadata(TestConfig.Bootstrap, _dataContext);
+            _metadata = new KafkaClusterMetadata(TestConfig.BuildKafkaClientConfig(), _dataContext);
 
             var messajes = Builder<TextMessaje>.CreateListOfSize(10)
                 .All()

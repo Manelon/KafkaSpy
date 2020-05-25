@@ -45,7 +45,7 @@ namespace KafkaSpy.Gui
             
             frmTopics.Y =Pos.Bottom(frmCluster);
 
-            var frmTopicDetails = new FrmTopicDetails(frmTopics.GetSelectedTopic().Name, kafkaCluster.GetBootstrapServers());
+            var frmTopicDetails = new FrmTopicDetails(frmTopics.GetSelectedTopic().Name, kafkaCluster.KafkaClientConfig);
             frmTopicDetails.Y = Pos.Bottom(frmCluster);
             frmTopicDetails.X = Pos.Right(frmTopics);
 
