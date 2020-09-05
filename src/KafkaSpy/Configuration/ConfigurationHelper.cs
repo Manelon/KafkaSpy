@@ -24,9 +24,9 @@ namespace KafkaSpy.Configuration
                 .Build();
         }
 
-        public static KafkaConfiguration GetKafkaConfiguration(this IConfiguration configuration)
+        public static ClientConfig GetKafkaConfiguration(this IConfiguration configuration)
         {
-            var kafkaConf = new KafkaConfiguration();
+            var kafkaConf = new ClientConfig();
             configuration.GetSection("Kafka")
                 .Bind(kafkaConf);
             return kafkaConf;
