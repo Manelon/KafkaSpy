@@ -7,13 +7,13 @@ namespace KafkaSpy.Tests.Configuration
     public class ConfigurationHelperTest
     {
         [Fact]
-        public void Get_Array_of_Configuration() {
+        public void Is_able_to_read_configuration_from_file()
+        {
             var args = new string[0];
-            var config = ConfigurationHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory(),"appsettings-test.json", args);
+            var config = ConfigurationHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory(), "appsettings-test.json", args);
 
-            var kafkaSection = config.GetSection("Kafka");
-
-            
+            var kafkaConfiguration = config.GetKafkaConfiguration();
+            Assert.Equal("localhost:9092", kafkaConfiguration.BootstrapServers);
         }
     }
 }

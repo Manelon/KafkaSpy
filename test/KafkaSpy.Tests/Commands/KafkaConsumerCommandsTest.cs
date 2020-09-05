@@ -31,7 +31,7 @@ namespace KafkaSpy.Tests.Commands
                                                                 progressResults.Add(r);});
 
 
-            var count = KafkaConsumer.CountTopicMessajes(TestConfig.BuildKafkaClientConfig(), "TestCount", _tempTopic.Name, stepProgress, progress);
+            var count = KafkaConsumer.CountTopicMessajes(TestConfig.kafkaClientConfig, "TestCount", _tempTopic.Name, stepProgress, progress);
 
             //Check toal
             Assert.Equal( _topicCountSize, count.Count);

@@ -1,17 +1,25 @@
+using System.IO;
 using Confluent.Kafka;
+using KafkaSpy.Configuration;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Configuration;
 
 namespace KafkaSpy.Tests
 {
-    public class TestConfig
+    static public class TestConfig
     {
-        public const string Bootstrap = "localhost:29092";
-        public static string ConnectionString = "Data Source=InMemoryKafkaSpy;Mode=Memory;Cache=Shared";
+        public static readonly string Bootstrap; //= "localhost:29092";
+        public static readonly string ConnectionString; //= "Data Source=InMemoryKafkaSpy;Mode=Memory;Cache=Shared";
 
-        public static ClientConfig BuildKafkaClientConfig(){
-            return new ClientConfig(){
-                BootstrapServers = Bootstrap
-            };
+        public static readonly ClientConfig kafkaClientConfig;
+
+        static TestConfig()
+        {
+            var args = new string[0];
+            var config = ConfigurationHelper.GetIConfigurationRoot(Directory.GetCurrentDirectory(), "appsettings-test.json", args);
+            kafkaClientConfig = config.GetKafkaConfiguration();
+            Bootstrap = kafkaClientConfig.BootstrapServers;
+            ConnectionString = config.GetConnectionString("Sqlite");
         }
     }
 }
